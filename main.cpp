@@ -20,13 +20,10 @@ vector<int> shortest_distance(int src,
 	vector<vector<pair<int,int> > > adj_list){
 
 	int n = adj_list.size();
-	vector<int>	dis(n, numeric_limits<int>::max()); 
-	//vector<int> p(n, -1);
+	vector<int>	dis(n, numeric_limits<int>::max());
 	
 	dis[src] = 0;
-	for(int it=0; it<n-1; it++){
-		// Loop over all edges
-				// Loop over all edges
+	
 		for(int u=0; u<n; u++)
 		{
 			for(int e=0; e<adj_list[u].size(); e++)
@@ -37,16 +34,50 @@ vector<int> shortest_distance(int src,
 				if(dis[u] + w < dis[v])
 				{
 					dis[v] = dis[u] + w;
-					//p[v] = u;
 				}
 			}
 		}
-	}
+	
 	
 	return dis;
-    //return p;
 }
 //--------------------------------------------------------------
+
+
+int shortest_distance_no(int src,int target,
+	vector<vector<pair<int,int> > > adj_list){
+
+	int n = adj_list.size();
+	vector<int>	dis(n, numeric_limits<int>::max());
+    int count=1;
+    int passed=0;
+	
+	dis[src] = 0;
+	//for(int it=0; it<n-1; it++){
+		// Loop over all edges
+				// Loop over all edges
+		for(int u=0; u<n; u++)
+		{
+			for(int e=0; e<adj_list[u].size(); e++)
+			{
+				int v = adj_list[u][e].first;
+				int w = adj_list[u][e].second;
+                //cout << u << "  "<<v<<"  "<< " "<< dis[v] <<endl;
+				
+				if(dis[u] + w < dis[v])
+				{
+					dis[v] = dis[u] + w;
+				}
+                else if(dis[u] + w == dis[v]){
+                    //cout << u << "  "<<v<<"  "<< " "<< dis[v] <<endl;
+                    count++;
+                }
+			}
+		}
+	//}
+	return count;
+	//return dis;
+}
 
 
 
@@ -64,6 +95,7 @@ main(){
     }
 
     vector<int> x = shortest_distance(0,adj_list);
+    //cout<< x << endl;
     for(int i =0;i<nodes;i++){
         cout<<x[i]<<endl;
     }
