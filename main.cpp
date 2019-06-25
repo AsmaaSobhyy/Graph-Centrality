@@ -99,7 +99,10 @@ main(){
     for(int i =0;i<nodes;i++){
         cout<<x[i]<<endl;
     }
-    
+	//to get degree 
+    for(int i=0;i<nodes;i++)
+		cout << adj_list[i].size() << endl;
+
     //--------testing----------------
     //vector of vectors
     // int i =2;
