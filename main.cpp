@@ -2,12 +2,70 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include <queue>
+#include <iomanip>
 
 
 using namespace std;
 
-vector<int> shortest_distance(int n,int src,
-	vector<vector<pair<int,int> > > adj_list);
+
+//----------------------------------------Degree------------------------------------
+void Degree(vector<vector<pair<int,int> > > adj_list,int nodes){
+
+	//to get degree 
+    for(int i=0;i<nodes;i++)
+		cout << adj_list[i].size() << endl;
+
+}
+
+
+
+//----------------------------------------closeness------------------------------------
+vector<int> DijkstraSP(vector< vector<pair<int, int> > > &adjList, int &start)
+    {
+   
+    vector<int> dist;
+    
+    // Initialize all source->vertex as infinite.
+    int n = adjList.size();
+    for(int i = 0; i < n; i++)
+        {
+        dist.push_back(1000000007); // Define "infinity" as necessary by constraints.
+        }
+        
+    // Create a PQ.
+    priority_queue<pair<int, int>, vector< pair<int, int> >, greater<pair<int, int> > > pq;
+    
+    // Add source to pq, where distance is 0.
+    pq.push(make_pair(start, 0));
+    dist[start] = 0;
+    
+    // While pq isn't empty...
+    while(pq.empty() == false)
+        {
+        // Get min distance vertex from pq. (Call it u.)
+        int u = pq.top().first;
+        pq.pop();
+        
+        // Visit all of u's friends. For each one (called v)....
+        for(int i = 0; i < adjList[u].size(); i++)
+            {
+            int v = adjList[u][i].first;
+            int weight = adjList[u][i].second;
+            
+            // If the distance to v is shorter by going through u...
+            if(dist[v] > dist[u] + weight)
+                {
+                // Update the distance of v.
+                dist[v] = dist[u] + weight;
+                // Insert v into the pq. 
+                pq.push(make_pair(v, dist[v]));
+                }
+            }
+        }
+    
+    return dist;
+    }
 
 void Closeness(int n,vector<vector<pair<int,int> > > adj_list)
 {
@@ -18,35 +76,18 @@ void Closeness(int n,vector<vector<pair<int,int> > > adj_list)
    for (int i = 0; i< n; i++)
    {
        sum=0;
-       dis=shortest_distance(n,i,adj_list);
-	   for(int m = 0 ; m<dis.size();m++)
-	   		cout <<dis[m]<<" ";
-		cout << endl;
-    //    for (int j = 0; j< n; j++)
-    //    {
-    //        sum+=dis[j];
-	// 	//    if(i==0){
-	// 	//    	cout << dis[j]<<"    ";
-	// 	//    }
+       dis=DijkstraSP(adj_list,i);
+       for (int j = 0; j< n; j++)
+       {
+           sum+=dis[j];
            
-    //    }
+        }
        ans=(float)(n-1)/(float)sum;
-       cout << ans << endl;
+       cout << ans << "\n";
    }
    
    
 }  
-
-
-void Degree(vector<vector<pair<int,int> > > adj_list,int nodes){
-
-	//to get degree 
-    for(int i=0;i<nodes;i++)
-		cout<< adj_list[i].size() << "\n";
-
-}
-
-
 
 
 //-----------------------------------------betweenness------------------------------------
@@ -66,7 +107,8 @@ float Bforpath(int finish,int src,int target,int between,int n,
 	if (src == target) // now path[] contains  nodes from finish to target
 	{ 
 		// decides if the available path is shorter than the current one.
-		if (weight<oldw){
+		
+		if (weight < oldw){
 			oldw=weight;
 			shortcount=1;
 			passed=0;
@@ -81,7 +123,7 @@ float Bforpath(int finish,int src,int target,int between,int n,
 		// if it have the same weight of the current shortest path increase number of short pathes "shortcount".
 		else if(weight==oldw){
 			shortcount++;
-			for (int i = 1; i<index+1; i++) {
+			for (int i = 1; i<index; i++) {
 				if(path[i]==between){
 					passed++;
 				}
@@ -98,7 +140,9 @@ float Bforpath(int finish,int src,int target,int between,int n,
 			int next=adj_list[src][i].first;// the next node.
 			if(!visited[next]){
 				weight+=adj_list[src][i].second;// add it's weight to the current path.
-				x = Bforpath(finish,next,target,between,n,adj_list,visited,path,index,weight,oldw,shortcount,passed);
+				if(weight<=oldw){
+					x = Bforpath(finish,next,target,between,n,adj_list,visited,path,index,weight,oldw,shortcount,passed);
+				}
 				weight-=adj_list[src][i].second;// remove it's weight to try different pathes.
 			}
 		}
@@ -110,12 +154,13 @@ float Bforpath(int finish,int src,int target,int between,int n,
 	index--; 
 	// if this is the first function called from outside not recurssuvely
 	if(finish==src){
+		//cout << src << " "<< between<<"  "<< target <<" : "<< passed <<" / "<< shortcount<<endl;
 		float ans =(float)passed/(float)shortcount;
 		return ans;
 		
 	}
 	// not used
-	 return x;//don't need a return value while searching for target.
+	 return 1;//don't need a return value while searching for target.
 
 
 	}
@@ -143,9 +188,9 @@ float Bforpath(int finish,int src,int target,int between,int n,
 						//initialize values each use.
 						weight =0;
 						index=0;
-						shortcount=1;
-						passed=0;
-						oldw=numeric_limits<int>::max();
+						// shortcount=1;
+						// passed=0;
+						oldw=1000000007;
 						// add betweenness for each path to the whole node betwenness.
 						betweenness+= Bforpath(i,i,j,between,n,adj_list,visited, path,index,weight,oldw,shortcount,passed);
 						
@@ -155,45 +200,13 @@ float Bforpath(int finish,int src,int target,int between,int n,
 			}
 		}
 		//print current betweennes for node "between" .. betweenness of adj_list[between].
-		cout << betweenness<< endl;
+		cout << betweenness<< "\n";
 	}
 
 
 	}
-//-------------------------------------------------------------------------------------------
-
 
 //-------------------------------------------------------
-vector<int> shortest_distance(int n,int src,
-	vector<vector<pair<int,int> > > adj_list){
-
-	//int n = adj_list.size();
-	vector<int>	dis(n, numeric_limits<int>::max());
-	
-	dis[src] = 0;
-	for(int it=0; it<n-1; it++){
-	
-		for(int u=0; u<n; u++)
-		{
-			for(int e=0; e<adj_list[u].size(); e++)
-			{
-				int v = adj_list[u][e].first;
-				int w = adj_list[u][e].second;
-				
-				if(dis[u] + w < dis[v])
-				{
-					dis[v] = dis[u] + w;
-				}
-			}
-		}
-	}
-	cout << src <<" : ";
-	for (int i =0;i<n;i++)
-		cout << dis[i] << " "; 
-	cout << endl;
-	return dis;
-}
-//--------------------------------------------------------------------------------------
 
 
 
@@ -203,7 +216,7 @@ main(){
 	//----------- taking input--------------------------
     int nodes,edges,n1,n2,val;
     cin>>nodes>>edges;
-
+	std::cout << std::fixed << std::setprecision(7);
     vector< vector< pair<int,int> > > adj_list( nodes, vector< pair <int, int> > ());       //using vector of vectors 
     //vector< list< pair<int,int> > > adj_list( nodes, list< pair <int, int> > ());        //using vector of lists
     for(int i=0;i<edges;i++){
@@ -219,7 +232,7 @@ main(){
     
 
 	//-----------to get betweenness------------------------
-	Betweenness(nodes, adj_list);
+	//Betweenness(nodes, adj_list);
 
 	//------------to get closeness-------------------------
 	//Closeness(nodes,adj_list);
