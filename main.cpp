@@ -3,9 +3,69 @@
 #include <vector>
 #include <list>
 #include <limits>
+#include <queue>
 
 
 using namespace std;
+
+
+//----------------------------------------Degree------------------------------------
+void Degree(vector<vector<pair<int,int> > > adj_list,int nodes){
+
+	//to get degree 
+    for(int i=0;i<nodes;i++)
+		cout << adj_list[i].size() << endl;
+
+}
+
+
+
+//----------------------------------------closeness------------------------------------
+vector<int> DijkstraSP(vector< vector<pair<int, int> > > &adjList, int &start)
+    {
+   
+    vector<int> dist;
+    
+    // Initialize all source->vertex as infinite.
+    int n = adjList.size();
+    for(int i = 0; i < n; i++)
+        {
+        dist.push_back(1000000007); // Define "infinity" as necessary by constraints.
+        }
+        
+    // Create a PQ.
+    priority_queue<pair<int, int>, vector< pair<int, int> >, greater<pair<int, int> > > pq;
+    
+    // Add source to pq, where distance is 0.
+    pq.push(make_pair(start, 0));
+    dist[start] = 0;
+    
+    // While pq isn't empty...
+    while(pq.empty() == false)
+        {
+        // Get min distance vertex from pq. (Call it u.)
+        int u = pq.top().first;
+        pq.pop();
+        
+        // Visit all of u's friends. For each one (called v)....
+        for(int i = 0; i < adjList[u].size(); i++)
+            {
+            int v = adjList[u][i].first;
+            int weight = adjList[u][i].second;
+            
+            // If the distance to v is shorter by going through u...
+            if(dist[v] > dist[u] + weight)
+                {
+                // Update the distance of v.
+                dist[v] = dist[u] + weight;
+                // Insert v into the pq. 
+                pq.push(make_pair(v, dist[v]));
+                }
+            }
+        }
+    
+    return dist;
+    }
 
 void Closeness(int n,vector<vector<pair<int,int> > > adj_list)
 {
@@ -16,7 +76,7 @@ void Closeness(int n,vector<vector<pair<int,int> > > adj_list)
    for (int i = 0; i< n; i++)
    {
        sum=0;
-       dis=shortest_distance(i,adj_list);
+       dis=DijkstraSP(adj_list,i);
        for (int j = 0; j< n; j++)
        {
            sum+=dis[j];
@@ -27,18 +87,7 @@ void Closeness(int n,vector<vector<pair<int,int> > > adj_list)
    }
    
    
-}  
-
-
-void Degree(vector<vector<pair<int,int> > > adj_list,int nodes){
-
-	//to get degree 
-    for(int i=0;i<nodes;i++)
-		cout << adj_list[i].size() << endl;
-
-}
-
-
+} 
 
 
 //-----------------------------------------betweenness------------------------------------
@@ -156,6 +205,7 @@ float Bforpath(int finish,int src,int target,int between,int n,
 
 
 //-------------------------------------------------------
+/*
 vector<int> shortest_distance(int src,
 	vector<vector<pair<int,int> > > adj_list){
 
@@ -184,6 +234,7 @@ vector<int> shortest_distance(int src,
 	return dis;
 }
 //--------------------------------------------------------------------------------------
+*/
 
 
 
