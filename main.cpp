@@ -7,8 +7,27 @@
 
 using namespace std;
 
-//to do 
-void Closeness(vector<vector<pair<int,int> > > adj_list,int nodes);
+void Closeness(int n,vector<vector<pair<int,int> > > adj_list)
+{
+
+   int sum;
+   float ans;
+   vector <int> dis;
+   for (int i = 0; i< n; i++)
+   {
+       sum=0;
+       dis=shortest_distance(i,adj_list);
+       for (int j = 0; j< n; j++)
+       {
+           sum+=dis[j];
+           
+       }
+       ans=(float)(n-1)/(float)sum;
+       cout << ans << endl;
+   }
+   
+   
+}  
 
 
 void Degree(vector<vector<pair<int,int> > > adj_list,int nodes){
