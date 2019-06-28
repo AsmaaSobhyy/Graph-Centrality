@@ -1,11 +1,13 @@
 
 #include <iostream>
 #include <vector>
-#include <list>
 #include <limits>
 
 
 using namespace std;
+
+vector<int> shortest_distance(int n,int src,
+	vector<vector<pair<int,int> > > adj_list);
 
 void Closeness(int n,vector<vector<pair<int,int> > > adj_list)
 {
@@ -16,12 +18,18 @@ void Closeness(int n,vector<vector<pair<int,int> > > adj_list)
    for (int i = 0; i< n; i++)
    {
        sum=0;
-       dis=shortest_distance(i,adj_list);
-       for (int j = 0; j< n; j++)
-       {
-           sum+=dis[j];
+       dis=shortest_distance(n,i,adj_list);
+	   for(int m = 0 ; m<dis.size();m++)
+	   		cout <<dis[m]<<" ";
+		cout << endl;
+    //    for (int j = 0; j< n; j++)
+    //    {
+    //        sum+=dis[j];
+	// 	//    if(i==0){
+	// 	//    	cout << dis[j]<<"    ";
+	// 	//    }
            
-       }
+    //    }
        ans=(float)(n-1)/(float)sum;
        cout << ans << endl;
    }
@@ -34,7 +42,7 @@ void Degree(vector<vector<pair<int,int> > > adj_list,int nodes){
 
 	//to get degree 
     for(int i=0;i<nodes;i++)
-		cout << adj_list[i].size() << endl;
+		cout<< adj_list[i].size() << "\n";
 
 }
 
@@ -156,10 +164,10 @@ float Bforpath(int finish,int src,int target,int between,int n,
 
 
 //-------------------------------------------------------
-vector<int> shortest_distance(int src,
+vector<int> shortest_distance(int n,int src,
 	vector<vector<pair<int,int> > > adj_list){
 
-	int n = adj_list.size();
+	//int n = adj_list.size();
 	vector<int>	dis(n, numeric_limits<int>::max());
 	
 	dis[src] = 0;
@@ -179,8 +187,10 @@ vector<int> shortest_distance(int src,
 			}
 		}
 	}
-	
-	
+	cout << src <<" : ";
+	for (int i =0;i<n;i++)
+		cout << dis[i] << " "; 
+	cout << endl;
 	return dis;
 }
 //--------------------------------------------------------------------------------------
@@ -209,10 +219,10 @@ main(){
     
 
 	//-----------to get betweenness------------------------
-	//Betweenness(nodes, adj_list);
+	Betweenness(nodes, adj_list);
 
 	//------------to get closeness-------------------------
-	//Closeness(adj_list,nodes);
+	//Closeness(nodes,adj_list);
 	
 	
 }
