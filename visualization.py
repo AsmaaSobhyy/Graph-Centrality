@@ -3,15 +3,21 @@ import matplotlib.pyplot as plt
 
 G=nx.Graph()
 
+f = open("input.txt", "r")
+k=list(map(str,f.readline().split()))
+
+n=k[0]
+m=int(k[1])
+#print(m)
+
+for i in range (0,m):
+    ins = list(map(str,f.readline().split()))
+    G.add_edge(ins[0],ins[1],weight=ins[2])
+
+f.close()
 
 
-G.add_edge("0","1",weight=1)
-G.add_edge("0","2",weight=1)
-G.add_edge("1","3",weight=1)
-G.add_edge("3","2",weight=1)
-G.add_edge("3","4",weight=1)
-G.add_edge("2","4",weight=3)
-
+plt.figure(1,figsize=(10,6))
 pos=nx.spring_layout(G)
 nx.draw(G,pos, with_labels = True)
 labels = nx.get_edge_attributes(G,'weight')

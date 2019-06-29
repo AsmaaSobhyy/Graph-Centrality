@@ -140,6 +140,7 @@ float Bforpath(int finish,int src,int target,int between,int n,
 			int next=adj_list[src][i].first;// the next node.
 			if(!visited[next]){
 				weight+=adj_list[src][i].second;// add it's weight to the current path.
+				
 				if(weight<=oldw){
 					x = Bforpath(finish,next,target,between,n,adj_list,visited,path,index,weight,oldw,shortcount,passed);
 				}
