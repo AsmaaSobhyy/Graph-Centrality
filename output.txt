@@ -1,0 +1,17 @@
+Degree Centrality : 
+3
+2
+2
+3
+
+Closeness Centrality : 
+0.3333333
+0.4285714
+0.2000000
+0.4285714
+
+Betweenness Centrality : 
+0.0000000
+2.0000000
+0.0000000
+2.0000000

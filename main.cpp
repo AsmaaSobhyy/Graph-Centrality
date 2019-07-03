@@ -4,6 +4,7 @@
 #include <limits>
 #include <queue>
 #include <iomanip>
+#include <cstdio>
 
 
 using namespace std;
@@ -215,6 +216,7 @@ float Bforpath(int finish,int src,int target,int between,int n,
 
 main(){
 	//----------- taking input--------------------------
+	 freopen("input.txt", "r", stdin);// read from file
     int nodes,edges,n1,n2,val;
     cin>>nodes>>edges;
 	std::cout << std::fixed << std::setprecision(7);
@@ -226,17 +228,26 @@ main(){
         adj_list[n2].push_back({n1,val});
 
     }
+	fclose (stdin);
 
+	// to output to a file 
+	freopen ("output.txt","w",stdout);
 
     //-----------to get degree ----------------------------
-	//Degree(adj_list,nodes);
+	cout<<"Degree Centrality : \n";
+	Degree(adj_list,nodes);
     
+	//------------to get closeness-------------------------
+	cout<<"\nCloseness Centrality : \n";
+	Closeness(nodes,adj_list);
 
 	//-----------to get betweenness------------------------
-	//Betweenness(nodes, adj_list);
+	cout<<"\nBetweenness Centrality : \n";
+	Betweenness(nodes, adj_list);
 
-	//------------to get closeness-------------------------
-	//Closeness(nodes,adj_list);
+	
+	fclose (stdout);// close file
+
 	
 	
 }
